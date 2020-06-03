@@ -90,6 +90,14 @@ KEY2_UP() {
   return
 }
 
+global canClose := false
+
 GuiClose:
-  MsgBox Closing!
+  if (not canClose) {
+    canClose := true
+    return
+  }
+  if (canClose) {
+    exitapp
+  }
 return
