@@ -17,20 +17,22 @@ Gui, Show, x511 y196 h294 w347,
 
 global activated := false
 global Key1 := "a"
-global Key2
-global Key3
+global Key2 := "b"
+global Key3 := "c"
 
 Activate() { 
   activated := true
   GuiControlget,Key1,,Key1 
   GuiControlget,Key2,,Key2 
   GuiControlget,Key3,,Key3 
-  MsgBox %Key1%
+  Hotkey,~%Key1% & %Key2%,KEY1_KEY2
+  Hotkey,%Key2%,KEY2
+  Hotkey,%Key2% up,KEY2_UP
 }
 
-global ctrl_i_pressed := false
-global t_pressed := false
-global t_released := false
+global KEY1_PRESSED := false
+global KEY2_PRESSED := false
+global KEY2_RELEASED := false
 
 SetTimer, myLoop, 0
 
@@ -38,44 +40,59 @@ myLoop(){
     if (!activated) { 
       return 
     }
-    if (t_pressed) {
+    if (KEY2_PRESSED) {
       Send, {%Key3% down}
     }
 }
 
-^i::
-  if (!activated) {
-    return
-  }
-  ctrl_i_pressed := true
-  return
+Hotkey,~%Key1% & %Key2%,KEY1_KEY2
+;Return
 
-$t::
+KEY1_KEY2() {
+  ;MsgBox "KEY1_KEY2"
   if (!activated) {
-    Send, {t down}
     return
   }
-  if (ctrl_i_pressed) {
-    t_pressed := true
+  KEY1_PRESSED := true
+  return
+}
+
+Hotkey,%Key2%,KEY2
+;Return
+
+KEY2() {
+  ;MsgBox "KEY2"
+  if (!activated) {
+    Send, {%KEY% down}
+    return
+  }
+  if (KEY1_PRESSED) {
+    KEY2_PRESSED := true
     return
   }
   Send, {t down}
   return
+}
 
-t up::
+Hotkey,%Key2% up,KEY2_UP
+;return
+
+KEY2_UP() {
+  ;MsgBox "KEY2_UP"
   if (!activated) {
     Send, {t up}
     return
   }
-  if (t_pressed and not t_released) {
-    t_released := true 
+  if (KEY2_PRESSED and not KEY2_RELEASED) {
+    KEY2_RELEASED := true 
     return
   }
-  if (t_released) {
-    ctrl_i_pressed := false
-    t_pressed := false
-    t_released := false
+  if (KEY2_RELEASED) {
+    KEY1_PRESSED := false
+    KEY2_PRESSED := false
+    KEY2_RELEASED := false
     return
   }
   Send, {t up}
   return
+}
