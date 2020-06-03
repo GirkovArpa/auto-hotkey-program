@@ -1,5 +1,4 @@
-
-Gui, Add, ComboBox, x12 y9 w100 h200, A||B|C|D|E|F|G|H|I|J|K|L|M|N|O|P|Q|R|S|T|U|V|W|X|Y|Z|0|1|2|3|4|5|6|7|6|8|9
+Gui, Add, ComboBox, x12 y9 w100 h200 vKey1, A||B|C|D|E|F|G|H|I|J|K|L|M|N|O|P|Q|R|S|T|U|V|W|X|Y|Z|0|1|2|3|4|5|6|7|6|8|9
 Gui, Add, ComboBox, x122 y9 w100 h200, A|B||C|D|E|F|G|H|I|J|K|L|M|N|O|P|Q|R|S|T|U|V|W|X|Y|Z|0|1|2|3|4|5|6|7|6|8|9
 Gui, Add, ComboBox, x232 y9 w100 h200, A||B|C||D|E|F|G|H|I|J|K|L|M|N|O|P|Q|R|S|T|U|V|W|X|Y|Z|0|1|2|3|4|5|6|7|6|8|9
 Gui, Add, Button, x12 y39 w320 h30 gActivate, Activate
@@ -9,8 +8,11 @@ Gui, Show, x511 y196 h294 w347,
 
 global activated := false
 
-Activate() {
+Activate() { 
   activated := true
+  GuiControlget,Output,,Key1 
+  MsgBox %Output%
+  return
 }
 
 global ctrl_i_pressed := false
